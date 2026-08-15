@@ -43,7 +43,7 @@ A reusable, portfolio-ready data cleaning tool built for freelance client work â
 ---
 
 ## ðŸ“« Connect with me
-- LinkedIn: *linkedin.com/in/divyanshu-kumar-sharma-106359363*
+- LinkedIn: *https://www.linkedin.com/in/divyanshu0-0-106359363/*
 - Email: *Divyanshu0_0@outlook.com*
 - Portfolio: *https://divyanshu0-0.github.io/*
 
