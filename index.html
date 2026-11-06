@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!-- <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Hero Case Files</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -685,6 +685,673 @@ password: ········<span class="cur"></span></pre>
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
+})();
+</script>
+
+</body></html> -->
+
+
+
+
+
+
+
+
+
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Hero Offline</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;700&family=Silkscreen:wght@400;700&display=swap">
+<style>
+:root {
+  /* Concept: the first grey "offline" screen, upgraded into a small arcade. One ink colour, hard pixel edges,
+     a pixel landscape behind the runner, sound and points. Single light theme by choice (no black page). */
+  --bg: #dadada;
+  --card: #e7e7e7;
+  --ink: #0d0d0d;
+  --mute: #555555;
+  --grid: rgba(13, 13, 13, 0.05);
+  --f-display: 'Pixelify Sans', 'Courier New', ui-monospace, monospace;
+  --f-label: 'Silkscreen', 'Pixelify Sans', ui-monospace, monospace;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background-color: var(--bg);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: var(--ink);
+  font-family: var(--f-display);
+  font-size: 18px;
+  line-height: 1.55;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); background: var(--bg); z-index: 30; }
+a { color: var(--ink); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+a:hover { text-decoration-style: dashed; }
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+
+.wrap {
+  width: 100%;
+  max-width: 980px;
+  margin-inline: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.label { font-family: var(--f-label); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; }
+b { font-variant-numeric: tabular-nums; }
+
+/* top bar */
+.topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bg); border-bottom: 3px solid var(--ink); }
+.bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 22px; padding-block: 12px; }
+.bar nav { display: flex; gap: 20px; }
+.bar nav a { text-decoration: none; }
+.bar nav a:hover { text-decoration: underline; text-decoration-style: solid; }
+@media (max-width: 680px) { .bar nav { display: none; } .bar { justify-content: space-between; } }
+.status { display: inline-flex; align-items: center; gap: 10px; }
+.status i { width: 10px; height: 10px; background: var(--ink); display: inline-block; }
+.status.off i { animation: blink 1.2s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.hud { display: inline-flex; align-items: center; gap: 14px; }
+.hud b { font-weight: 400; display: inline-block; min-width: 4ch; text-align: right; }
+.snd { font-family: var(--f-label); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; background: var(--bg); color: var(--ink); border: 2px solid var(--ink); padding: 5px 9px; cursor: pointer; }
+.snd[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+
+/* hero */
+.hero { padding-block: clamp(32px, 6vw, 64px) clamp(32px, 5vw, 56px); }
+.eyebrow { color: var(--mute); margin: 0 0 18px; }
+h1 { font-weight: 700; font-size: clamp(2.5rem, 8vw, 5.2rem); line-height: 1; letter-spacing: -0.01em; margin: 0 0 22px; text-wrap: balance; max-width: 14ch; }
+.lede { max-width: 56ch; margin: 0 0 28px; font-size: 1.1rem; }
+.cta { display: flex; flex-wrap: wrap; gap: 16px; }
+.btn { font-family: var(--f-label); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; display: inline-block; padding: 13px 20px; border: 3px solid var(--ink); background: var(--bg); color: var(--ink); box-shadow: 5px 5px 0 var(--ink); cursor: pointer; transition: transform .08s, box-shadow .08s; }
+.btn:hover { transform: translate(-1px, -1px); box-shadow: 6px 6px 0 var(--ink); }
+.btn:active { transform: translate(4px, 4px); box-shadow: 1px 1px 0 var(--ink); }
+.btn.solid { background: var(--ink); color: var(--bg); }
+
+/* game */
+.play { margin-top: clamp(28px, 5vw, 52px); background: var(--card); border: 3px solid var(--ink); box-shadow: 6px 6px 0 var(--ink); padding: 12px 12px 12px; }
+#game { display: block; width: 100%; height: auto; image-rendering: pixelated; image-rendering: crisp-edges; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.play-meta { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 20px; color: var(--mute); margin-top: 10px; padding-top: 10px; border-top: 3px dashed var(--ink); }
+.play-meta b { color: var(--ink); font-weight: 400; }
+.badges { list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.badges li { font-family: var(--f-label); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; border: 2px dashed var(--mute); color: var(--mute); padding: 3px 8px; }
+.badges li.got { border: 2px solid var(--ink); background: var(--ink); color: var(--bg); }
+
+.toast { position: fixed; z-index: 40; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 24px); opacity: 0; pointer-events: none; background: var(--ink); color: var(--bg); padding: 10px 16px; max-width: calc(100% - 32px); text-align: center; transition: opacity .15s, transform .15s; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* sections */
+section { padding-block: clamp(44px, 7vw, 88px); }
+.sec-head { display: flex; flex-direction: column; gap: 8px; margin-bottom: 32px; }
+.sec-head .label { color: var(--mute); margin: 0; }
+h2 { font-weight: 700; font-size: clamp(1.9rem, 5vw, 3rem); line-height: 1.05; margin: 0; text-wrap: balance; }
+.sub { color: var(--mute); margin: 0; max-width: 56ch; }
+
+/* projects */
+.grid { display: grid; grid-template-columns: 1fr; gap: 26px; }
+@media (min-width: 760px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .card.wide { grid-column: span 2; } }
+.card { background: var(--card); border: 3px solid var(--ink); box-shadow: 6px 6px 0 var(--ink); padding: 22px; display: flex; flex-direction: column; gap: 12px; min-width: 0; transition: transform .1s, box-shadow .1s; }
+.card:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 var(--ink); }
+.card-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.badge { font-family: var(--f-label); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; background: var(--ink); color: var(--bg); padding: 3px 8px; }
+.card h3 { font-weight: 700; font-size: 1.45rem; line-height: 1.15; margin: 0; text-wrap: balance; }
+.card p { margin: 0; max-width: 64ch; }
+.flow { font-family: var(--f-label); font-size: 12px; letter-spacing: 0.04em; border: 2px dashed var(--ink); padding: 8px 12px; overflow-wrap: anywhere; }
+.tags { list-style: none; margin: auto 0 0; padding: 12px 0 0; display: flex; flex-wrap: wrap; gap: 8px; border-top: 2px dashed var(--mute); }
+.tags li { font-family: var(--f-label); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; border: 2px solid var(--ink); padding: 2px 7px; }
+.term { margin: 0; padding: 14px 16px; background: var(--ink); color: var(--bg); font-family: var(--f-label); font-size: 12px; line-height: 1.8; letter-spacing: 0.06em; overflow-x: auto; }
+.cur { display: inline-block; width: 8px; height: 1em; background: var(--bg); vertical-align: -2px; margin-left: 3px; animation: blink 1.1s steps(1) infinite; }
+
+/* skills */
+.panel { border: 3px solid var(--ink); background: var(--card); box-shadow: 6px 6px 0 var(--ink); padding: clamp(18px, 3vw, 30px); }
+.rows { margin: 0; }
+.row { display: grid; grid-template-columns: 1fr; gap: 4px; padding: 14px 0; border-bottom: 2px dashed var(--mute); }
+.row:first-child { padding-top: 0; }
+.row:last-child { border-bottom: 0; padding-bottom: 0; }
+@media (min-width: 700px) { .row { grid-template-columns: 190px minmax(0, 1fr); gap: 24px; align-items: baseline; } }
+.row dt { color: var(--mute); }
+.row dd { margin: 0; }
+
+/* direction */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; }
+.steps li { display: grid; grid-template-columns: 14px 1fr; gap: 16px; align-items: start; }
+.steps li::before { content: ""; width: 14px; height: 14px; background: var(--ink); margin-top: 7px; }
+.steps b { font-weight: 700; font-size: 1.25rem; display: block; line-height: 1.2; }
+.steps span { color: var(--mute); }
+
+/* contact */
+.contact .panel { display: grid; gap: 20px; }
+.contact h2 { margin: 0; }
+.contact p { margin: 0; max-width: 56ch; }
+.addr { font-family: var(--f-label); font-size: 14px; letter-spacing: 0.04em; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; overflow-wrap: anywhere; }
+.copy { font-family: var(--f-label); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; background: var(--bg); color: var(--ink); border: 2px solid var(--ink); padding: 5px 10px; cursor: pointer; }
+.copy:hover { background: var(--ink); color: var(--bg); }
+footer { padding-block: 24px calc(40px + env(safe-area-inset-bottom, 0px)); color: var(--mute); border-top: 3px solid var(--ink); }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 24px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .status.off i, .cur { animation: none; }
+  .toast { transition: none; }
+  html { scroll-behavior: auto; }
+}
+</style>
+
+<div class="topbar"><div class="wrap bar">
+  <span class="label status off" id="status"><i></i><span id="statusText">Offline</span></span>
+  <div class="label hud">
+    <span>Points <b id="pts">0000</b></span>
+    <button class="snd" id="snd" type="button" aria-pressed="true">Sound on</button>
+  </div>
+  <nav class="label" aria-label="Sections">
+    <a href="#work">Projects</a>
+    <a href="#skills">Skills</a>
+    <a href="#next">Next</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</div></div>
+
+<header class="wrap hero">
+  <p class="label eyebrow">Divyanshu Kumar Sharma &middot; AI/ML engineer in training &middot; Ranchi, India</p>
+  <h1>Offline mode. Still building.</h1>
+  <p class="lede">I build end-to-end healthcare AI: models that read medical images and show their reasoning, plus the pipelines around them. I am open to internships, entry-level roles and freelance machine learning work.</p>
+  <div class="cta">
+    <a class="btn solid" href="#work">Reconnect</a>
+    <a class="btn" href="https://github.com/Divyanshu0-0">GitHub</a>
+  </div>
+
+  <div class="play">
+    <canvas id="game" tabindex="0" role="img" aria-label="A small pixel robot runs along a line, jumps over bugs and collects coins. Click, tap or press Space to play."></canvas>
+    <div class="label play-meta"><span id="hint">Click or tap the game to play. Space also jumps</span><span>Run <b id="run">0</b> &middot; Best <b id="best">0</b> &middot; Combo <b id="combo">x1</b></span></div>
+    <ul class="badges" id="badges" aria-label="Badges"></ul>
+  </div>
+</header>
+<div class="label toast" id="toast" role="status" aria-live="polite"></div>
+
+<main>
+  <section id="work">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="label">Projects</p>
+        <h2>Nine things I have built, or am building</h2>
+        <p class="sub">The badge on each card says where it stands today.</p>
+      </div>
+
+      <div class="grid">
+        <article class="card wide">
+          <header class="card-top"><span class="label">Healthcare imaging</span><span class="badge">Built</span></header>
+          <h3>Blood Cancer Detection</h3>
+          <p>A PyTorch CNN pipeline for cancer detection from histopathology images: a ResNet-50 backbone with attention gates and stain normalization. Grad-CAM makes each prediction visible, so the decision can be checked by eye instead of trusted blindly.</p>
+          <p>A parallel scikit-learn ensemble on engineered clinical features runs beside it, for comparison with the deep learning approach.</p>
+          <ul class="tags"><li>PyTorch</li><li>ResNet-50</li><li>Attention gates</li><li>Stain normalization</li><li>Grad-CAM</li><li>scikit-learn</li></ul>
+        </article>
+
+        <article class="card wide">
+          <header class="card-top"><span class="label">Healthcare imaging</span><span class="badge">Active</span></header>
+          <h3>Chest X-Ray Multi-Disease Classifier</h3>
+          <p>A six-week structured build that reads chest X-rays and flags more than one disease at once. It trains on the NIH ChestX-ray14 sample subset in Google Colab. Focal Loss handles the rare findings and Grad-CAM shows where the model looked.</p>
+          <p class="flow">ChestX-ray14 sample &gt; DenseNet-121 &gt; Focal Loss &gt; Grad-CAM &gt; FastAPI + Streamlit</p>
+          <ul class="tags"><li>DenseNet-121</li><li>Focal Loss</li><li>Grad-CAM</li><li>MLflow</li><li>Docker</li><li>FastAPI</li><li>Streamlit</li></ul>
+        </article>
+
+        <article class="card">
+          <header class="card-top"><span class="label">LLM app</span><span class="badge">Prototype</span></header>
+          <h3>MediDiagnose CMS</h3>
+          <p>A prototype that reads patient reports (blood tests, X-rays, CT scans) through the Claude API. It returns a structured diagnosis with a confidence score and a severity rating, so a clinician can review faster.</p>
+          <ul class="tags"><li>Claude API</li><li>HTML / JS</li><li>Structured output</li></ul>
+        </article>
+
+        <article class="card">
+          <header class="card-top"><span class="label">On-device</span><span class="badge">Planned</span></header>
+          <h3>Skin Lesion Risk Classifier</h3>
+          <p>An Android app that scores skin lesion risk on the phone. Kotlin and Jetpack Compose on the front, a TFLite model underneath, laid out as a four-phase roadmap.</p>
+          <ul class="tags"><li>Kotlin</li><li>Jetpack Compose</li><li>TFLite</li></ul>
+        </article>
+
+        <article class="card">
+          <header class="card-top"><span class="label">Machine learning</span><span class="badge">Built</span></header>
+          <h3>End-to-End ML Pipeline</h3>
+          <p>A complete workflow from raw data to results: preprocessing, feature engineering, model training and evaluation, with predictive analytics that turn raw datasets into insights someone can act on.</p>
+          <ul class="tags"><li>Preprocessing</li><li>Feature engineering</li><li>Evaluation</li><li>Python</li></ul>
+        </article>
+
+        <article class="card">
+          <header class="card-top"><span class="label">Automation</span><span class="badge">Built</span></header>
+          <h3>Admit Card Automation Tool</h3>
+          <p>A freelance and institutional project for Ranchi University. A Python and Selenium script reads a CSV and downloads admit cards in bulk for hundreds of students. A manual, repetitive job became one automated batch run.</p>
+          <ul class="tags"><li>Python</li><li>Selenium</li><li>CSV</li><li>Ranchi University</li></ul>
+        </article>
+
+        <article class="card">
+          <header class="card-top"><span class="label">Freelance</span><span class="badge">Offering</span></header>
+          <h3>Data Cleaning Toolkit</h3>
+          <p>A reusable Python cleaning script (clean_data.py) made for freelance clients. It generates the client-facing report on its own and is packaged with full documentation as a freelance offering.</p>
+          <ul class="tags"><li>Python</li><li>Pandas</li><li>Auto reports</li><li>Documentation</li></ul>
+        </article>
+
+        <article class="card">
+          <header class="card-top"><span class="label">Systems</span><span class="badge">Building</span></header>
+          <h3>Umbrella OS</h3>
+          <p>A custom Linux-based operating system I am building with a friend. I wrote the login screen: HTML and JS on the LightDM webkit2-greeter. It went through a dark rain theme, then a terminal theme with scanlines, and its biohazard logo assembles itself on load.</p>
+          <pre class="term" aria-hidden="true">UMBRELLA OS // greeter
+login: hero
+password: ········<span class="cur"></span></pre>
+          <ul class="tags"><li>Linux</li><li>LightDM</li><li>webkit2-greeter</li><li>HTML / JS</li></ul>
+        </article>
+
+        <article class="card">
+          <header class="card-top"><span class="label">Audio</span><span class="badge">On file</span></header>
+          <h3>Deepfake Voice Detector</h3>
+          <p>A project on telling real human voices from synthetic ones.</p>
+          <ul class="tags"><li>Deepfake detection</li><li>Audio</li></ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="label">Skills</p>
+        <h2>What I work with</h2>
+      </div>
+      <div class="panel">
+        <dl class="rows">
+          <div class="row"><dt class="label">Deep learning</dt><dd>PyTorch, CNNs, ResNet-50, DenseNet-121, Grad-CAM, attention mechanisms, transfer learning, Focal Loss</dd></div>
+          <div class="row"><dt class="label">Classical ML</dt><dd>scikit-learn, ensemble modeling, feature engineering, model evaluation</dd></div>
+          <div class="row"><dt class="label">Data and automation</dt><dd>Pandas, NumPy, Selenium, data cleaning pipelines</dd></div>
+          <div class="row"><dt class="label">Domain and tools</dt><dd>Medical imaging, stain normalization, Git and GitHub, HuggingFace (learning)</dd></div>
+          <div class="row"><dt class="label">Shipping</dt><dd>FastAPI, Streamlit, Docker, MLflow, Google Colab</dd></div>
+          <div class="row"><dt class="label">On-device</dt><dd>Kotlin, Jetpack Compose, TFLite</dd></div>
+          <div class="row"><dt class="label">Education</dt><dd>B.Sc. Computer Applications, Ranchi University (in progress)</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section id="next">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="label">Next</p>
+        <h2>Where I am going</h2>
+        <p class="sub">I am building an AI/ML portfolio aimed at healthcare and medical imaging.</p>
+      </div>
+      <ul class="steps">
+        <li><div><b>Medical imaging</b><span>X-rays, blood cells, skin lesions. The projects above.</span></div></li>
+        <li><div><b>Multi-modal learning</b><span>Images together with the reports that describe them.</span></div></li>
+        <li><div><b>MLOps</b><span>Tracking, containers and APIs, so a model can leave the notebook.</span></div></li>
+        <li><div><b>Research and open source</b><span>Starting with a look at MONAI.</span></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div class="wrap">
+      <div class="panel">
+        <p class="label" style="margin:0;color:var(--mute)">Contact</p>
+        <h2>Back online.</h2>
+        <p>I am open to AI/ML internships, entry-level roles and freelance machine learning work. Freelance data cleaning comes with a report your client can read.</p>
+        <p class="addr"><span id="mail">dvnsh76@gmail.com</span> <button class="copy" id="copyMail" type="button">Copy</button></p>
+        <div class="cta">
+          <a class="btn solid" href="https://github.com/Divyanshu0-0">GitHub</a>
+          <a class="btn" href="https://linkedin.com/in/divyanshu0-0-">LinkedIn</a>
+          <a class="btn" href="https://divyanshu0-0.github.io">Plain version</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap label"><span>Divyanshu Kumar Sharma &middot; 2026</span><span>Ranchi, India</span></div>
+</footer>
+
+<script>
+(function () {
+  function $(id) { return document.getElementById(id); }
+  function lsGet(k, d) { try { var v = localStorage.getItem(k); return v === null ? d : v; } catch (e) { return d; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, String(v)); } catch (e) {} }
+  function pad(n, l) { n = String(n); while (n.length < (l || 4)) n = '0' + n; return n; }
+
+  /* ---------- sound (Web Audio synth, starts after the first click or key) ---------- */
+  var AC = null, master = null, noiseBuf = null, soundOn = lsGet('snd', '1') !== '0';
+  function unlockAudio() {
+    if (!AC) {
+      try {
+        var C = window.AudioContext || window.webkitAudioContext;
+        if (C) {
+          AC = new C(); master = AC.createGain(); master.gain.value = 0.14; master.connect(AC.destination);
+          noiseBuf = AC.createBuffer(1, AC.sampleRate * 0.5, AC.sampleRate);
+          var d = noiseBuf.getChannelData(0); for (var i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+        }
+      } catch (e) { AC = null; }
+    }
+    if (AC && AC.state === 'suspended') AC.resume();
+  }
+  function tone(f, d, type, vol, to, delay) {
+    if (!soundOn || !AC) return;
+    var t = AC.currentTime + (delay || 0), o = AC.createOscillator(), g = AC.createGain();
+    o.type = type || 'square';
+    o.frequency.setValueAtTime(f, t);
+    if (to) o.frequency.exponentialRampToValueAtTime(to, t + d);
+    g.gain.setValueAtTime(vol || 0.7, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + d);
+    o.connect(g); g.connect(master); o.start(t); o.stop(t + d + 0.03);
+  }
+  function noise(d, vol) {
+    if (!soundOn || !AC || !noiseBuf) return;
+    var t = AC.currentTime, s = AC.createBufferSource(), g = AC.createGain();
+    s.buffer = noiseBuf; g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.001, t + d);
+    s.connect(g); g.connect(master); s.start(t); s.stop(t + d);
+  }
+  var sfx = {
+    jump: function () { tone(330, 0.14, 'square', 0.6, 760); },
+    coin: function () { tone(988, 0.07, 'square', 0.55); tone(1319, 0.18, 'square', 0.55, null, 0.07); },
+    dodge: function () { tone(520, 0.05, 'triangle', 0.5); },
+    hit: function () { tone(240, 0.42, 'sawtooth', 0.8, 45); noise(0.3, 0.6); },
+    level: function () { [523, 659, 784, 1047].forEach(function (f, i) { tone(f, 0.12, 'square', 0.5, null, i * 0.08); }); },
+    badge: function () { [659, 880, 1319].forEach(function (f, i) { tone(f, 0.14, 'triangle', 0.7, null, i * 0.09); }); },
+    ui: function () { tone(440, 0.05, 'triangle', 0.5); },
+    online: function () { tone(392, 0.1, 'square', 0.45); tone(587, 0.2, 'square', 0.45, null, 0.1); },
+    combo: function () { tone(740, 0.06, 'square', 0.4); tone(988, 0.1, 'square', 0.4, null, 0.06); }
+  };
+  document.addEventListener('pointerdown', unlockAudio);
+  document.addEventListener('keydown', unlockAudio);
+
+  var sndBtn = $('snd');
+  function paintSnd() { sndBtn.setAttribute('aria-pressed', soundOn ? 'true' : 'false'); sndBtn.textContent = soundOn ? 'Sound on' : 'Sound off'; }
+  sndBtn.addEventListener('click', function () { soundOn = !soundOn; lsSet('snd', soundOn ? '1' : '0'); paintSnd(); unlockAudio(); sfx.ui(); });
+  paintSnd();
+  document.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('.btn, .copy')) sfx.ui(); });
+
+  /* ---------- points, toast, badges ---------- */
+  var points = 0, ptsEl = $('pts'), toastEl = $('toast'), toastT = 0;
+  function addPoints(n) { points += n; ptsEl.textContent = pad(points); }
+  function toast(msg) {
+    toastEl.textContent = msg; toastEl.classList.add('show');
+    clearTimeout(toastT); toastT = setTimeout(function () { toastEl.classList.remove('show'); }, 2300);
+  }
+  var BADGES = [
+    { id: 'jump', name: 'First jump' },
+    { id: 'dodge', name: '10 bugs dodged' },
+    { id: 'coin', name: '10 coins' },
+    { id: 'score', name: 'Run score 300' },
+    { id: 'explorer', name: 'Explorer' }
+  ];
+  var got = [];
+  try { got = JSON.parse(lsGet('badges', '[]')) || []; } catch (e) { got = []; }
+  var badgesEl = $('badges');
+  function renderBadges() {
+    badgesEl.innerHTML = '';
+    BADGES.forEach(function (b) {
+      var li = document.createElement('li');
+      var on = got.indexOf(b.id) >= 0;
+      li.className = on ? 'got' : '';
+      li.textContent = b.name;
+      li.title = on ? 'Unlocked' : 'Locked';
+      badgesEl.appendChild(li);
+    });
+  }
+  function unlockBadge(id) {
+    if (got.indexOf(id) >= 0) return;
+    got.push(id); lsSet('badges', JSON.stringify(got)); renderBadges();
+    var b = BADGES.filter(function (x) { return x.id === id; })[0];
+    addPoints(50); sfx.badge(); toast('Badge unlocked: ' + b.name + ' (+50)');
+  }
+  renderBadges();
+  var dodgeTotal = parseInt(lsGet('dodges', '0'), 10) || 0, coinTotal = parseInt(lsGet('coins', '0'), 10) || 0;
+
+  /* ---------- top bar status and section discovery ---------- */
+  var st = $('status'), stt = $('statusText'), wasOn = false;
+  function status() {
+    var on = window.scrollY > 260;
+    st.className = 'label status ' + (on ? 'on' : 'off');
+    stt.textContent = on ? 'Online' : 'Offline';
+    if (on && !wasOn) sfx.online();
+    wasOn = on;
+  }
+  window.addEventListener('scroll', status, { passive: true });
+  status();
+  var seen = {}, NAMES = { work: 'Projects', skills: 'Skills', next: 'Roadmap', contact: 'Contact' };
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (en) {
+      en.forEach(function (e) {
+        var id = e.target.id;
+        if (e.isIntersecting && !seen[id]) {
+          seen[id] = true; addPoints(25); toast('+25 ' + NAMES[id] + ' found');
+          if (Object.keys(seen).length === 4) setTimeout(function () { unlockBadge('explorer'); }, 900);
+        }
+      });
+    }, { threshold: 0.3 });
+    Object.keys(NAMES).forEach(function (id) { var el = $(id); if (el) io.observe(el); });
+  }
+
+  /* ---------- copy email ---------- */
+  var cb = $('copyMail');
+  cb.addEventListener('click', function () {
+    var el = $('mail');
+    function sel() { var r = document.createRange(); r.selectNodeContents(el); var g = getSelection(); g.removeAllRanges(); g.addRange(r); cb.textContent = 'Selected'; }
+    try { navigator.clipboard.writeText(el.textContent).then(function () { cb.textContent = 'Copied'; }, sel); } catch (e) { sel(); }
+  });
+
+  /* ---------- the game ---------- */
+  var cv = $('game'), ctx = cv.getContext('2d');
+  var W = 600, H = 190, S = 4, GY = 150;
+  cv.width = W; cv.height = H;
+  var runEl = $('run'), bestEl = $('best'), comboEl = $('combo'), hintEl = $('hint');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var HEAD = ['....XX....', '....XX....', '.XXXXXXXX.', '.X......X.', '.X.X..X.X.', '.X......X.', '.XXXXXXXX.', 'X.XXXXXX.X', 'X.X.XX.X.X', '..XXXXXX..'];
+  var LEG_A = ['..XX..XX..', '..XX..XX..', '.XXX..XXX.'];
+  var LEG_B = ['...XXXX...', '...X..X...', '..XX..XX..'];
+  var BUG = ['.X.....X.', '..X...X..', '...XXX...', '.XXXXXXX.', 'X.XXXXX.X', '..XXXXX..', '.X.XXX.X.', 'X.......X'];
+  var DRONE = ['XX.......XX', '.XXXXXXXXX.', '..XX.X.XX..', '...XXXXX...', '....X.X....'];
+  var COIN = ['..XXX..', '.X...X.', 'X..X..X', 'X..X..X', 'X..X..X', '.X...X.', '..XXX..'];
+  var RW = 10 * S, RH = 13 * S, BW = 9 * S, BH = 8 * S, DW = 11 * S, DH = 5 * S, CS = 3, CW = 7 * CS, RX = 70;
+
+  var ink = '#0d0d0d', card = '#e7e7e7';
+  function readTokens() {
+    var cs = getComputedStyle(document.documentElement);
+    ink = cs.getPropertyValue('--ink').trim() || ink;
+    card = cs.getPropertyValue('--card').trim() || card;
+  }
+  function spr(rows, x, y, s) {
+    s = s || S; ctx.fillStyle = ink;
+    for (var r = 0; r < rows.length; r++) for (var c = 0; c < rows[r].length; c++) if (rows[r][c] === 'X') ctx.fillRect(Math.round(x + c * s), Math.round(y + r * s), s, s);
+  }
+  function txt(s, x, y, size, align, alpha) {
+    ctx.font = size + 'px Silkscreen, "Courier New", monospace';
+    ctx.textAlign = align || 'left'; ctx.globalAlpha = alpha == null ? 1 : alpha; ctx.fillStyle = ink;
+    ctx.fillText(s, Math.round(x), Math.round(y)); ctx.globalAlpha = 1;
+  }
+
+  var mode = 'demo', off = 0, vy = 0, obs = [], coins = [], parts = [], texts = [];
+  var speed = 4.5, runScore = 0, dist = 0, streak = 0, mult = 1, level = 1, flash = 0, shake = 0, overT = 0, spawnIn = 150;
+  var hillX = 0, frameN = 0, newBest = false, hitSet = false;
+  var best = parseInt(lsGet('best', '0'), 10) || 0;
+  bestEl.textContent = best;
+  var dashes = [], clouds = [], i;
+  for (i = 0; i < 26; i++) dashes.push({ x: Math.random() * W, y: GY + 8 + Math.floor(Math.random() * 3) * 8, w: 2 + Math.floor(Math.random() * 3) * 4 });
+  for (i = 0; i < 3; i++) clouds.push({ x: 80 + i * 210 + Math.random() * 60, y: 22 + Math.random() * 30 });
+
+  function reset(m) {
+    mode = m; off = 0; vy = 0; obs = []; coins = []; parts = []; texts = [];
+    speed = 4.5; runScore = 0; dist = 0; streak = 0; mult = 1; level = 1; flash = 0; shake = 0; overT = 0; newBest = false; hitSet = false;
+    spawnIn = m === 'demo' ? 150 : 200;
+    runEl.textContent = '0'; comboEl.textContent = 'x1';
+  }
+  function burst(x, y, n, up) {
+    for (var k = 0; k < n; k++) parts.push({ x: x, y: y, vx: (Math.random() - 0.5) * 3.4, vy: -Math.random() * (up || 2.6) - 0.4, l: 22 + Math.random() * 12 });
+  }
+  function spawn() {
+    var r = Math.random(), o;
+    if (mode === 'play' && runScore > 60 && r > 0.78) {
+      o = { kind: 'drone', x: W + 10, w: DW, h: DH, y: GY - 62 - DH, passed: false, ph: Math.random() * 6 };
+    } else if (r > 0.55) {
+      o = { kind: 'bug', n: 2, x: W + 10, w: 2 * BW + 4, h: BH, y: GY - BH, passed: false };
+    } else {
+      o = { kind: 'bug', n: 1, x: W + 10, w: BW, h: BH, y: GY - BH, passed: false };
+    }
+    obs.push(o);
+    if (o.kind === 'bug' && Math.random() < 0.7) {
+      var cx = o.x + o.w / 2;
+      for (var k = -1; k <= 1; k++) coins.push({ x: cx + k * 34 - CW / 2, y: GY - 84 - (k === 0 ? 12 : 0) });
+    }
+  }
+  function award(n, x, y) {
+    if (mode !== 'play') return;
+    n = Math.round(n); runScore += n; addPoints(n); runEl.textContent = runScore;
+    if (x != null) texts.push({ x: x, y: y, t: '+' + n, l: 44 });
+    var nl = 1 + Math.floor(runScore / 150);
+    if (nl > level) { level = nl; flash = 80; sfx.level(); }
+    if (runScore >= 300) unlockBadge('score');
+  }
+  function bump() {
+    streak++;
+    var m = Math.min(4, 1 + Math.floor(streak / 5));
+    if (m > mult) { mult = m; sfx.combo(); toast('Combo x' + mult); }
+    comboEl.textContent = 'x' + mult;
+  }
+  function jumpNow() { if (off === 0) { vy = 11.5; return true; } return false; }
+  function die() {
+    mode = 'over'; overT = 0; shake = 18; sfx.hit();
+    burst(RX + RW / 2, GY - off - RH / 2, 16, 4);
+    if (runScore > best) { best = runScore; lsSet('best', best); bestEl.textContent = best; newBest = true; setTimeout(function () { if (mode === 'over') sfx.level(); }, 600); }
+    hintEl.textContent = 'Click, tap or press Space to retry';
+  }
+
+  function step() {
+    frameN++;
+    if (shake > 0) shake--;
+    if (flash > 0) flash--;
+    var k, o, c;
+    for (k = parts.length - 1; k >= 0; k--) { c = parts[k]; c.x += c.vx; c.y += c.vy; c.vy += 0.18; c.l--; if (c.l <= 0) parts.splice(k, 1); }
+    for (k = texts.length - 1; k >= 0; k--) { texts[k].y -= 0.6; texts[k].l--; if (texts[k].l <= 0) texts.splice(k, 1); }
+    if (mode === 'over') { overT++; if (overT > 420) { reset('demo'); hintEl.textContent = 'Click or tap the game to play. Space also jumps'; } return; }
+
+    var target = mode === 'demo' ? 4.5 : Math.min(7.5, 4.5 + (level - 1) * 0.45);
+    speed += (target - speed) * 0.05;
+    if (off > 0 || vy > 0) { var was = off > 0; off += vy; vy -= 0.62; if (off <= 0) { off = 0; vy = 0; if (was) burst(RX + RW / 2, GY, 4, 1.2); } }
+    spawnIn -= speed;
+    if (spawnIn <= 0) { spawn(); spawnIn = (210 + Math.random() * 170) * (speed / 4.5); }
+    for (k = 0; k < obs.length; k++) { obs[k].x -= speed; if (obs[k].kind === 'drone') obs[k].y = GY - 62 - DH + Math.sin((frameN + obs[k].ph * 20) / 14) * 5; }
+    for (k = 0; k < coins.length; k++) coins[k].x -= speed;
+    while (obs.length && obs[0].x + obs[0].w < -20) obs.shift();
+    while (coins.length && coins[0].x < -30) coins.shift();
+    hillX += speed;
+    for (k = 0; k < dashes.length; k++) { dashes[k].x -= speed; if (dashes[k].x + dashes[k].w < 0) dashes[k].x += W + 20; }
+    for (k = 0; k < clouds.length; k++) { clouds[k].x -= speed * 0.25; if (clouds[k].x < -60) clouds[k].x = W + 20; }
+    if (mode === 'play') { dist += speed; if (dist >= 45) { dist -= 45; award(1); } }
+
+    var rl = RX + 6, rr = RX + RW - 4, rt = GY - RH - off + 6, rb = GY - off;
+    for (k = 0; k < obs.length; k++) {
+      o = obs[k];
+      if (!o.passed && o.x + o.w < RX + 4) {
+        o.passed = true;
+        if (mode === 'play') { dodgeTotal++; lsSet('dodges', dodgeTotal); if (dodgeTotal >= 10) unlockBadge('dodge'); sfx.dodge(); bump(); award(10 * mult, RX + RW, GY - off - RH - 6); }
+      }
+      if (mode === 'demo' && o.kind === 'bug' && !o.passed && off === 0 && o.x - rr <= 30 && o.x > RX) jumpNow();
+      var hl = o.x + 4, hr = o.x + o.w - 4, ht = o.y + 4, hb = o.y + o.h;
+      if (rr > hl && rl < hr && rb > ht && rt < hb && mode === 'play') { die(); return; }
+    }
+    for (k = coins.length - 1; k >= 0; k--) {
+      c = coins[k];
+      if (rr > c.x && rl < c.x + CW && rb > c.y && rt < c.y + CW) {
+        coins.splice(k, 1); burst(c.x + CW / 2, c.y + CW / 2, 6, 2);
+        if (mode === 'play') { coinTotal++; lsSet('coins', coinTotal); if (coinTotal >= 10) unlockBadge('coin'); sfx.coin(); bump(); award(25 * mult, c.x, c.y - 4); }
+      }
+    }
+  }
+
+  function draw() {
+    if (frameN % 30 === 0) readTokens();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    if (shake > 0) ctx.translate(Math.round((Math.random() - 0.5) * shake * 0.5), Math.round((Math.random() - 0.5) * shake * 0.5));
+    var k, x, hh;
+    ctx.fillStyle = ink;
+    /* sun, hills, clouds */
+    ctx.globalAlpha = 0.1;
+    for (var dy = -5; dy <= 5; dy++) for (var dx = -5; dx <= 5; dx++) if (dx * dx + dy * dy <= 26) ctx.fillRect(470 + dx * 6, 52 + dy * 6, 6, 6);
+    ctx.globalAlpha = 0.07;
+    for (x = 0; x < W; x += 8) { var xf = x + hillX * 0.15; hh = 52 + Math.round((Math.sin(xf * 0.013 + 1) * 26 + Math.sin(xf * 0.031 + 2) * 12) / 8) * 8; ctx.fillRect(x, GY - hh, 8, hh); }
+    ctx.globalAlpha = 0.11;
+    for (x = 0; x < W; x += 8) { var xn = x + hillX * 0.35; hh = 24 + Math.round((Math.sin(xn * 0.02 + 4) * 14 + Math.sin(xn * 0.047) * 8) / 8) * 8; ctx.fillRect(x, GY - hh, 8, hh); }
+    ctx.globalAlpha = 0.16;
+    for (k = 0; k < clouds.length; k++) { var cl = clouds[k]; ctx.fillRect(cl.x + 8, cl.y, 32, 4); ctx.fillRect(cl.x, cl.y + 4, 48, 4); ctx.fillRect(cl.x + 8, cl.y + 8, 32, 4); }
+    ctx.globalAlpha = 1; ctx.fillStyle = ink;
+    ctx.fillRect(0, GY, W, 3);
+    for (k = 0; k < dashes.length; k++) ctx.fillRect(Math.round(dashes[k].x), dashes[k].y, dashes[k].w, 2);
+
+    for (k = 0; k < coins.length; k++) spr(COIN, coins[k].x, coins[k].y + Math.round(Math.sin((frameN + k * 8) / 9) * 2), CS);
+    for (k = 0; k < obs.length; k++) {
+      var o = obs[k];
+      if (o.kind === 'drone') spr(DRONE, o.x, o.y);
+      else for (var n = 0; n < o.n; n++) spr(BUG, o.x + n * (BW + 4), GY - BH);
+    }
+    if (!(mode === 'over')) {
+      var ry = GY - RH - off;
+      var legs = off > 0 || reduce ? LEG_A : (Math.floor(frameN / 6) % 2 ? LEG_A : LEG_B);
+      spr(HEAD, RX, ry); spr(legs, RX, ry + 10 * S);
+    } else {
+      spr(HEAD, RX, GY - RH + 14 - 0); /* fallen robot, shorter */
+    }
+    ctx.fillStyle = ink;
+    for (k = 0; k < parts.length; k++) { ctx.globalAlpha = Math.min(1, parts[k].l / 14); ctx.fillRect(Math.round(parts[k].x), Math.round(parts[k].y), 4, 4); }
+    ctx.globalAlpha = 1;
+    for (k = 0; k < texts.length; k++) txt(texts[k].t, texts[k].x, texts[k].y, 14, 'left', Math.min(1, texts[k].l / 16));
+
+    /* hud */
+    txt('HI ' + pad(best), W - 12, 22, 12, 'right', 0.55);
+    txt(pad(runScore), W - 12, 44, 20, 'right');
+    if (mode === 'play' && mult > 1) txt('COMBO x' + mult, 12, 22, 12, 'left');
+    if (mode === 'play' && flash > 0) txt('LEVEL ' + level, W / 2, 84, 22, 'center', Math.min(1, flash / 20));
+    if (mode === 'demo' && Math.floor(frameN / 30) % 2 === 0) txt('CLICK OR TAP TO PLAY', W / 2, 76, 14, 'center');
+    if (mode === 'over') {
+      var bx = W / 2 - 170, by = 46, bw = 340, bh = 84;
+      ctx.fillStyle = ink; ctx.fillRect(bx - 4, by - 4, bw + 8, bh + 8);
+      ctx.fillStyle = card; ctx.fillRect(bx, by, bw, bh);
+      txt('GAME OVER', W / 2, by + 32, 24, 'center');
+      txt((newBest ? 'NEW BEST ' : 'SCORE ') + runScore + '  ·  TAP TO RETRY', W / 2, by + 62, 12, 'center');
+    }
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+  }
+
+  function press() {
+    if (reduce) return;
+    if (mode === 'over') { if (overT < 25) return; reset('play'); }
+    else if (mode === 'demo') { reset('play'); hintEl.textContent = 'Jump the bugs, grab the coins. Combo grows as you go'; }
+    if (jumpNow()) { sfx.jump(); burst(RX + RW / 2, GY, 4, 1.2); unlockBadge('jump'); }
+  }
+  cv.addEventListener('pointerdown', function (e) { e.preventDefault(); cv.focus({ preventScroll: true }); press(); });
+  cv.addEventListener('keydown', function (e) { if (e.code === 'Space' || e.code === 'ArrowUp') { e.preventDefault(); press(); } });
+
+  var raf = 0, lastT = 0, acc = 0;
+  function frame(t) {
+    if (!lastT) lastT = t;
+    acc += Math.min(100, t - lastT); lastT = t;
+    while (acc >= 16.667) { step(); acc -= 16.667; }
+    draw();
+    raf = requestAnimationFrame(frame);
+  }
+  function start() { if (!raf && !reduce) { lastT = 0; raf = requestAnimationFrame(frame); } }
+  function stop() { if (raf) { cancelAnimationFrame(raf); raf = 0; } }
+
+  reset('demo');
+  readTokens();
+  if (document.fonts && document.fonts.load) { document.fonts.load('12px Silkscreen').then(function () { if (reduce) draw(); }); }
+  if (reduce) {
+    obs.push({ kind: 'bug', n: 1, x: 330, w: BW, h: BH, y: GY - BH, passed: false });
+    hintEl.textContent = 'The game is off because your device asks for less motion';
+    draw();
+  } else {
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (en) { if (en[0].isIntersecting) start(); else stop(); }).observe(cv);
+    }
+    start();
+  }
 })();
 </script>
 
